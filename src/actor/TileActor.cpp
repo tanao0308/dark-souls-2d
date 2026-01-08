@@ -1,11 +1,14 @@
 #include "actor/TileActor.h"
 
 // public
-TilePos TileActor::GetTilePos() { return tilePos; }
-TilePos TileActor::~GetTilePos() {}
 
 // protected
-TileActor::TileActor(TilePos tilePos, TileType tileType) : tilePos(tilePos), tileType(tileType) {}
+TileActor::TileActor(Vector2 tilePos, int layer, TileType tileType) : tileType(tileType) {
+    // 设置当前区块的位置属性
+    transform.SetTileCenterPosition(tilePos);
+    transform.SetLayer(layer);
+}
+TileActor::~TileActor() {}
 void TileActor::HandleInput(const bool keys[]) {}
 void TileActor::HandleUpdate(float deltaTime) {}
 

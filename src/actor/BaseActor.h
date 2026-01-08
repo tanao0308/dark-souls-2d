@@ -5,6 +5,7 @@ class BaseActor : public Actor {
     friend class Game;
 
     BaseActor();
+    ~BaseActor();
     void HandleInput(const bool keys[]) override;
     void HandleUpdate(float deltaTime) override;
 

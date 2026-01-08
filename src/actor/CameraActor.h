@@ -8,6 +8,7 @@ class CameraActor : public Actor {
     friend class Game;
 
     CameraActor(PlayerActor *player);
+    ~CameraActor();
     void HandleInput(const bool keys[]) override;
     void HandleUpdate(float deltaTime) override;
 

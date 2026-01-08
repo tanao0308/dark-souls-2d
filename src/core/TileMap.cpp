@@ -1,4 +1,3 @@
-// TileMap.cpp
 #include "TileMap.h"
 #include "core/Game.h"
 

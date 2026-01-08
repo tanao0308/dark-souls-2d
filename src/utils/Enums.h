@@ -6,6 +6,7 @@ static constexpr float TILE_SIZE = 5.0f;
 
 // Actor 渲染顺序枚举类
 enum class RenderOrder { // 从小到大进行渲染
+    NONE,
     MAP,
     PLAYER,
 };

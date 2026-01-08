@@ -6,10 +6,10 @@
 // public
 
 // protected
-PlayerActor::PlayerActor() {
+PlayerActor::PlayerActor(): kSize(2.0f, 2.0f) {
     // 初始化位置
-    GetTransform().SetScale(kScale);
-    GetTransform().SetRotation(kRotation);
+    transform.SetTileSize(kSize); // 待修改为 TILE_SIZE 单位
+    transform.SetRotation(kRotation);
 
     // 初始化渲染组件
     m_render = CreateComponent<RenderComponent>();
@@ -21,23 +21,10 @@ PlayerActor::PlayerActor() {
 }
 PlayerActor::~PlayerActor() {}
 void PlayerActor::HandleInput(const bool keys[]) {
-    m_move->SetPosSpeed(posSpeed);
-
-    Vector2 tarDir = tarActor->GetTransform().GetPosition() - GetTransform().GetPosition();
-    float tarRot = atan2(-tarDir.y, tarDir.x);
-    float curRot = GetTransform().GetRotation();
-    float deltaRot = tarRot - curRot;
-    while (deltaRot > Math::Pi) {
-        deltaRot -= Math::TwoPi;
-    }
-    while (deltaRot < -Math::Pi) {
-        deltaRot += Math::TwoPi;
-    }
-    if (deltaRot < 0) {
-        m_move->SetRotSpeed(-rotSpeed);
-    } else {
-        m_move->SetRotSpeed(+rotSpeed);
-    }
+    int posMove = keys[SDL_SCANCODE_W] - keys[SDL_SCANCODE_S];
+    int rotMove = keys[SDL_SCANCODE_A] - keys[SDL_SCANCODE_D];
+    this->m_move->SetPosSpeed(posMove * kPosSpeed);
+    this->m_move->SetRotSpeed(rotMove * kRotSpeed);
 }
 void PlayerActor::HandleUpdate(float deltaTime) {}
 

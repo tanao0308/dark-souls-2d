@@ -1,4 +1,3 @@
-// TileMap.h
 #pragma once
 #include "actor/TileActor.h"
 #include "core/Game.h"
@@ -7,7 +6,7 @@
 class TileMap {
   protected:
     friend Game;
-    TileMap(int width, int height, int layers = 1);
+    TileMap(Vector2 tilePos, int layers = 0);
     ~TileMap();
 
     void GenerateTiles(); // 创建 TileActor

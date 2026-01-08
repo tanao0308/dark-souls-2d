@@ -1,6 +1,3 @@
-//
-// Created by Sanjay on 7/19/2025.
-//
 #pragma once
 
 class Actor;

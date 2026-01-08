@@ -1,7 +1,3 @@
-//
-// Created by Sanjay on 7/19/2025.
-//
-
 #include "actor/Actor.h"
 
 // public

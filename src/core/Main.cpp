@@ -1,11 +1,3 @@
-//
-//  Main.cpp
-//  Game-mac
-//
-//  Created by Sanjay Madhav on 5/31/17.
-//  Copyright © 2017 Sanjay Madhav. All rights reserved.
-//
-
 #include "core/Game.h"
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>

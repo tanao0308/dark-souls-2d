@@ -21,5 +21,5 @@ void MoveComponent::HandleUpdate(float deltaTime) {
     auto deltaRot = rotSpeed * deltaTime;
     tran.SetRotation(tran.GetRotation() + deltaRot);
     auto deltaPos = tran.GetForward() * posSpeed * deltaTime;
-    tran.SetPosition(tran.GetPosition() + deltaPos);
+    tran.SetTileCenterPosition(tran.GetTileCenterPosition() + deltaPos);
 }

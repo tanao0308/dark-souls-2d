@@ -18,14 +18,14 @@ bool Game::Initialize() {
         return false;
     }
     // 初始化窗口
-    sdlWindow = SDL_CreateWindow("MyWindow", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    if (!sdlWindow) {
+    m_sdlWindow = SDL_CreateWindow("MyWindow", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    if (!m_sdlWindow) {
         SDL_Log("初始化 窗口 失败");
         return false;
     }
     // 初始化渲染器
-    sdlRenderer = SDL_CreateRenderer(sdlWindow, nullptr);
-    if (!sdlRenderer) {
+    m_sdlRenderer = SDL_CreateRenderer(m_sdlWindow, nullptr);
+    if (!m_sdlRenderer) {
         SDL_Log("初始化 渲染器 失败");
         return false;
     }
@@ -34,96 +34,79 @@ bool Game::Initialize() {
 
     // 加载数据
     LoadData();
-    prevTime = SDL_GetTicks();
+    m_prevTime = SDL_GetTicks();
     return true;
 }
 bool Game::RunIteration() {
-    running &= ProcessInput();
-    running &= UpdateGame();
-    running &= GenerateOutput();
-    return running;
+    m_running &= ProcessInput();
+    m_running &= UpdateGame();
+    m_running &= GenerateOutput();
+    return m_running;
 }
 void Game::Shutdown() {
     // 清除数据
     UnloadData();
     // SDL 善后
-    SDL_DestroyRenderer(sdlRenderer);
-    SDL_DestroyWindow(sdlWindow);
+    SDL_DestroyRenderer(m_sdlRenderer);
+    SDL_DestroyWindow(m_sdlWindow);
     SDL_Quit();
     return;
 }
 void Game::HandleEvent(const SDL_Event *event) {
     if (event->type == SDL_EVENT_QUIT) {
-        running = false;
+        m_running = false;
     }
     return;
 }
 SDL_Texture *Game::GetTexture(std::string file) {
-    if (mTextures.count(file)) {
-        return mTextures[file];
+    if (m_Textures.count(file)) {
+        return m_Textures[file];
     }
     auto surface = IMG_Load(file.c_str());
     if (!surface) {
         SDL_Log("GetTexture() 获取surface失败");
         return nullptr;
     }
-    auto texture = SDL_CreateTextureFromSurface(sdlRenderer, surface);
+    auto texture = SDL_CreateTextureFromSurface(m_sdlRenderer, surface);
     SDL_DestroySurface(surface);
-    mTextures[file] = texture;
+    m_Textures[file] = texture;
     return texture;
 }
-void Game::AddRender(RenderComponent *sc) { mRenders.push_back(sc); }
-void Game::RemoveRender(RenderComponent *sc) { std::erase(mRenders, sc); }
+void Game::AddRender(RenderComponent *sc) { m_Renders.push_back(sc); }
+void Game::RemoveRender(RenderComponent *sc) { std::erase(m_Renders, sc); }
 
 // private
 bool Game::ProcessInput() {
-    keyboardState = SDL_GetKeyboardState(nullptr);
-    if (keyboardState[SDL_SCANCODE_ESCAPE]) {
-        running = false;
+    m_keyboardState = SDL_GetKeyboardState(nullptr);
+    if (m_keyboardState[SDL_SCANCODE_ESCAPE]) {
+        m_running = false;
     }
-    for (auto actor : mActors) {
-        actor->Input(keyboardState);
+    for (auto actor : m_Actors) {
+        actor->Input(m_keyboardState);
     }
     return true;
 }
 bool Game::UpdateGame() {
     Uint64 curTime = SDL_GetTicks();
-    deltaTime = Math::Min(0.033f, (curTime - prevTime) / 1000.0f);
-    prevTime = curTime;
+    m_deltaTime = Math::Min(0.033f, (curTime - m_prevTime) / 1000.0f);
+    m_prevTime = curTime;
 
-    for (auto actor : mActors) {
-        actor->Update(deltaTime);
+    for (auto actor : m_Actors) {
+        actor->Update(m_deltaTime);
     }
 
     return true;
 }
 bool Game::GenerateOutput() {
-    /*
-    // 设置渲染器颜色
-    if (!SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 255)) {
-        SDL_Log("设置渲染器颜色失败");
-        return false;
-    }
-    // 使用颜色刷新界面
-    if (!SDL_RenderClear(sdlRenderer)) {
-        SDL_Log("刷新背景界面失败");
-        return false;
-    }
-    // 设置渲染器颜色
-    if (!SDL_SetRenderDrawColor(sdlRenderer, 0, 255, 255, 255)) {
-        SDL_Log("设置渲染器颜色失败");
-        return false;
-    }
-    */
     // 优先级排序 Actor
-    std::ranges::stable_sort(mRenders, [](const RenderComponent *a, const RenderComponent *b) {
+    std::ranges::stable_sort(m_Renders, [](const RenderComponent *a, const RenderComponent *b) {
         return a->GetDrawOrder() < b->GetDrawOrder();
     });
     // 渲染 Actor
-    for (auto sc : mRenders) {
-        sc->Draw(sdlRenderer);
+    for (auto sc : m_Renders) {
+        sc->Draw(m_sdlRenderer);
     }
-    if (!SDL_RenderPresent(sdlRenderer)) {
+    if (!SDL_RenderPresent(m_sdlRenderer)) {
         SDL_Log("推送渲染失败");
         return false;
     }
@@ -132,25 +115,25 @@ bool Game::GenerateOutput() {
 void Game::LoadData() {
     // 创建地图actor（临时）
     Actor *bgActor = CreateActor<BaseActor>();
-    mActors.push_back(bgActor);
+    m_Actors.push_back(bgActor);
     bgActor->GetTransform().SetPosition({WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2});
     RenderComponent *bgRender = bgActor->CreateComponent<RenderComponent>();
     bgRender->SetTexture(GetTexture("Assets/Stars.png"));
-    bgRender->SetDrawOrder(-42);
+    bgRender->SetDrawOrder(RenderOrder::MAP);
 
     // 创建玩家actor
     Actor *playerActor = CreateActor<PlayerActor>();
 
     // 创建镜头actor
-    CreateActor<CameraActor>();
+    CreateActor<CameraActor>(playerActor);
 }
 void Game::UnloadData() {
     // 释放游戏对象
-    for (auto actor : mActors) {
+    for (auto actor : m_Actors) {
         delete actor;
     }
     // 释放图片资源
-    for (auto it : mTextures) {
+    for (auto it : m_Textures) {
         SDL_DestroyTexture(it.second);
     }
 }
