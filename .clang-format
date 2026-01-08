@@ -1,0 +1,3 @@
+BasedOnStyle: LLVM  # 可以改为 LLVM、Google、Mozilla、WebKit 等
+IndentWidth: 4      # 缩进空格数
+ColumnLimit: 120
