@@ -13,7 +13,7 @@ class Component {
 
   protected:
     friend class Actor;
-    Actor *actor;
+    Actor *m_actor;
 
     Component(Actor *actor);
     virtual ~Component();

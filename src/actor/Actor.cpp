@@ -1,27 +1,27 @@
 #include "actor/Actor.h"
 
 // public
-Transform &Actor::GetTransform() { return transform; }
-const Transform &Actor::GetTransform() const { return transform; }
+Transform &Actor::GetTransform() { return m_transform; }
+const Transform &Actor::GetTransform() const { return m_transform; }
 
 void Actor::Input(const bool keys[]) {
-    for (auto cmp : mComponents) {
-        cmp->HandleInput(keys);
+    for (auto comp : m_components) {
+        comp->HandleInput(keys);
     }
     HandleInput(keys);
 }
 void Actor::Update(float deltaTime) {
-    for (auto cmp : mComponents) {
-        cmp->Update(deltaTime);
+    for (auto comp : m_components) {
+        comp->Update(deltaTime);
     }
     HandleUpdate(deltaTime);
 }
 
 // protected
-Actor::Actor() {}
+Actor::Actor() : m_transform() {}
 
 Actor::~Actor() {
-    for (auto comp : mComponents) {
+    for (auto comp : m_components) {
         delete comp;
     }
 }

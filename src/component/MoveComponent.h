@@ -1,6 +1,3 @@
-//
-// Created by Sanjay on 7/19/2025.
-//
 #pragma once
 
 #include "SDL3/SDL.h"
@@ -22,6 +19,6 @@ class MoveComponent : public Component {
     void HandleUpdate(float deltaTime) override;
 
   private:
-    float posSpeed = 0.0f;
-    float rotSpeed = 0.0f;
+    float m_posSpeed = 0.0f;
+    float m_rotSpeed = 0.0f;
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "actor/Actor.h"
 #include "actor/PlayerActor.h"
 #include "component/MoveComponent.h"

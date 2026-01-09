@@ -1,3 +1,5 @@
+#pragma once
+
 #include "actor/Actor.h"
 #include "component/RenderComponent.h"
 

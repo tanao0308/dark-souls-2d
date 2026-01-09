@@ -26,9 +26,15 @@ add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(dark-souls-2d PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+# target_include_directories(dark-souls-2d PRIVATE
+#     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/spdlog/include
+# )
+
+# 增加 spdlog
+add_subdirectory(third_party/spdlog)
 
 # Link against SDL3
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL3_image::SDL3_image SDL3::SDL3 spdlog)
 
 # On Windows, we also need to copy the DLLs to the target directory
 if(WIN32)

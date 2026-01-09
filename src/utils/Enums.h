@@ -1,7 +1,9 @@
 #pragma once
 
-static constexpr float WINDOW_WIDTH = 800.0f;
-static constexpr float WINDOW_HEIGHT = 600.0f;
+const bool DEBUG = true;
+
+static constexpr float WINDOW_WIDTH = 160.0F;
+static constexpr float WINDOW_HEIGHT = 120.0f;
 static constexpr float TILE_SIZE = 5.0f;
 
 // Actor 渲染顺序枚举类

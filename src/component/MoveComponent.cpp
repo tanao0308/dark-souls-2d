@@ -4,22 +4,24 @@
 
 #include "component/MoveComponent.h"
 #include "actor/Actor.h"
+#include "spdlog/spdlog.h"
 #include "utils/Math.h"
 
 // public
-void MoveComponent::SetPosSpeed(float posSpeed) { posSpeed = posSpeed; }
-float MoveComponent::GetPosSpeed() { return posSpeed; }
-void MoveComponent::SetRotSpeed(float rotSpeed) { rotSpeed = rotSpeed; }
-float MoveComponent::GetRotSpeed() { return rotSpeed; }
+void MoveComponent::SetPosSpeed(float posSpeed) { m_posSpeed = posSpeed; }
+float MoveComponent::GetPosSpeed() { return m_posSpeed; }
+void MoveComponent::SetRotSpeed(float rotSpeed) { m_rotSpeed = rotSpeed; }
+float MoveComponent::GetRotSpeed() { return m_rotSpeed; }
 // protected
 MoveComponent::MoveComponent(class Actor *owner) : Component(owner) {}
 MoveComponent::~MoveComponent() {}
-void MoveComponent::HandleInput(const bool keys[]) {}
+void MoveComponent::HandleInput(const bool keys[]) { spdlog::debug("MoveComponent::HandleInput()"); }
 
 void MoveComponent::HandleUpdate(float deltaTime) {
-    auto &tran = actor->GetTransform();
-    auto deltaRot = rotSpeed * deltaTime;
+    spdlog::debug("MoveComponent::HandleUpdate()");
+    auto &tran = m_actor->GetTransform();
+    auto deltaRot = m_rotSpeed * deltaTime;
     tran.SetRotation(tran.GetRotation() + deltaRot);
-    auto deltaPos = tran.GetForward() * posSpeed * deltaTime;
+    auto deltaPos = tran.GetForward() * m_posSpeed * deltaTime;
     tran.SetTileCenterPosition(tran.GetTileCenterPosition() + deltaPos);
 }

@@ -6,14 +6,15 @@
 // public
 
 // protected
-PlayerActor::PlayerActor(): kSize(2.0f, 2.0f) {
+PlayerActor::PlayerActor() : kSize(20.0f, 20.0f) {
     // 初始化位置
-    transform.SetTileSize(kSize); // 待修改为 TILE_SIZE 单位
-    transform.SetRotation(kRotation);
+    m_transform.SetTileCenterPosition({WINDOW_WIDTH/2, WINDOW_HEIGHT/2});
+    m_transform.SetTileSize(kSize);
+    m_transform.SetRotation(kRotation);
 
     // 初始化渲染组件
     m_render = CreateComponent<RenderComponent>();
-    m_render->SetTexture(gGame.GetTexture("Assets/Player.png"));
+    m_render->SetTexture(gGame.GetTexture("Assets/Ship.png"));
     m_render->SetDrawOrder(RenderOrder::PLAYER);
 
     // 初始化移动组件
